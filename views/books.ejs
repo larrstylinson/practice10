@@ -1,0 +1,103 @@
+<!-- books.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff0f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2 {
+            color: #ff69b4;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #ff69b4;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #d966ac;
+        }
+        .navbar {
+            background-color: #FFFFFF7F;
+            width: 100%;
+            height: 53px;
+            margin: 20px auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a href="/logout">logout</a>
+</div>
+<h1>Bookstore</h1>
+
+<h2>All Books</h2>
+<ul id="bookList">
+    <% books.forEach(book => { %>
+        <li><%= book.title %> by <%= book.author %> - <%= book.genre %> - <%= book.publicationYear %> - <%= book.price %> - Quantity available: <%= book.quantityAvailable %>
+            <% if (isAdmin) { %>
+                <button class="deleteButton" data-id="<%= book._id %>">Delete</button>
+            <% } %>
+        </li>
+    <% }) %>
+</ul>
+
+<h2>Add New Book</h2>
+<form id="addBookForm" action="/books" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br>
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" required><br>
+    <label for="genre">Genre:</label>
+    <input type="text" id="genre" name="genre" required><br>
+    <label for="publicationYear">Publication Year:</label>
+    <input type="number" id="publicationYear" name="publicationYear" required><br>
+    <label for="quantityAvailable">Quantity Available:</label>
+    <input type="number" id="quantityAvailable" name="quantityAvailable" required><br>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" step="0.01" required><br>
+    <button type="submit">Add Book</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const deleteButtons = document.querySelectorAll('.deleteButton');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const bookId = button.getAttribute('data-id');
+                try {
+                    await fetch(`/books/${bookId}`, {
+                        method: 'DELETE'
+                    });
+                    const listItem = button.parentElement;
+                    listItem.remove();
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

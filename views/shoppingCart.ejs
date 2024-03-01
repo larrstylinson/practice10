@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            background-color: lightblue;
+        }
+        .item {
+            margin-bottom: 10px;
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Shopping Cart</h1>
+<div id="shoppingCart">
+    <% shoppingCart.forEach(item => { %>
+        <div class="item">
+            <% const book = item.book; %>
+            <p>Title: <%= book.title %></p>
+            <p>Author: <%= book.author %></p>
+            <p>Price: <%= book.price %></p>
+        </div>
+    <% }) %>
+</div>
+</body>
+</html>
